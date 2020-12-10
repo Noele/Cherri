@@ -1,2 +1,12 @@
 # Cherri
-C++ discord bot using SleepyDiscord
+C++ Discord Bot Using [SleepyDiscord](https://github.com/yourWaifu/sleepy-discord)
+
+<h2> TO:DO </h2>
+<ol>
+  <li> Command handler </li>
+  <li> Audio </li>
+  <li> General Commands </li>
+  <li> Moderation Commands </li>
+  <li> Image Welcome </li>
+  <li> Mod Logs </li>
+</ol>
