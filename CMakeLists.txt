@@ -10,7 +10,10 @@ add_executable(Dawn main.cpp
                 Config.h
                 Config.cpp
                 Economy.h
-                Economy.cpp)
+                Economy.cpp
+                CommandHandler.h
+                CommandHandler.cpp
+                Response.h)
 
 add_subdirectory(deps/sleepy-discord)
 add_subdirectory(deps/fmt)
