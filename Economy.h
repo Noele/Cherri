@@ -2,6 +2,7 @@
 #include <fstream>
 #include <iomanip>
 #include "sleepy_discord/sleepy_discord.h"
+#pragma once 
 
 class Economy {
 public:

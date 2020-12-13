@@ -1,12 +1,10 @@
 #include "Cherri.h"
-
+Command* Cherri::commands[] = {new Avatar("avatar"), new Daily("daily"), new Balance("balance")};
 void Cherri::onMessage(SleepyDiscord::Message message) {
     std::istringstream iss(message.content);
     std::vector<std::string> results(std::istream_iterator<std::string>{iss}, std::istream_iterator<std::string>());
     Response response;
     SleepyDiscord::User contextUser;
-    Avatar* a = new Avatar("avatar");
-    Command* commands[] = {a};
     
     try { 
         contextUser = results.size() == 1 ? message.author : getUser(Toolbox::regexRemove(results[1], "[^0-9]+"));
@@ -14,7 +12,7 @@ void Cherri::onMessage(SleepyDiscord::Message message) {
         contextUser = message.author;
     }
     
-    for(Command* c : commands) {
+    for(Command* c : Cherri::commands) {
         if (message.startsWith(Config::prefix + c->name)) {
             response = c->execute(message, contextUser);
         }
@@ -32,22 +30,3 @@ void Cherri::onMessage(SleepyDiscord::Message message) {
     }
 
 }  
-
-/**
- * Economy commands 
- */
-/*
-void Cherri::daily(SleepyDiscord::Message message) {
-    Economy::addUserCredits(std::string(message.author.ID), 5000);
-    SleepyDiscord::Embed embed;
-    embed.title = "Added 5000 credits to your account !";
-    embed.color = 0x00FF00;
-    sendMessage(message.channelID, "", embed);
-}
-
-void Cherri::balance(SleepyDiscord::Message message) {
-    SleepyDiscord::Embed embed;
-    embed.title = fmt::format("You have {} credits in your account", Economy::getUserCredits(std::string(message.author.ID)));
-    embed.color = 0x00FF00;
-    sendMessage(message.channelID, "", embed);
-}*/

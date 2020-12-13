@@ -14,7 +14,11 @@ add_executable(Dawn main.cpp
                 Response.h
                 Command.h
                 Avatar.h
-                Avatar.cpp)
+                Avatar.cpp
+                Daily.h
+                Daily.cpp
+                Balance.h
+                Balance.cpp)
 
 add_subdirectory(deps/sleepy-discord)
 add_subdirectory(deps/fmt)
