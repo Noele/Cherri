@@ -1,46 +1,42 @@
 #include "Cherri.h"
 
 void Cherri::onMessage(SleepyDiscord::Message message) {
-    if (message.startsWith(Config::prefix + "hello")) {
-			sendMessage(message.channelID, "Hello " + message.author.username);
+    std::istringstream iss(message.content);
+    std::vector<std::string> results(std::istream_iterator<std::string>{iss}, std::istream_iterator<std::string>());
+    Response response;
+    SleepyDiscord::User contextUser;
+    Avatar* a = new Avatar("avatar");
+    Command* commands[] = {a};
+    
+    try { 
+        contextUser = results.size() == 1 ? message.author : getUser(Toolbox::regexRemove(results[1], "[^0-9]+"));
+    } catch (const std::exception& e) {
+        contextUser = message.author;
+    }
+    
+    for(Command* c : commands) {
+        if (message.startsWith(Config::prefix + c->name)) {
+            response = c->execute(message, contextUser);
         }
-    if (message.startsWith(Config::prefix + "avatar")) {
-        Cherri::avatar(message);
     }
-    if(message.startsWith(Config::prefix + "daily")) {
-        Cherri::daily(message);
+    
+    switch(response.rtype) {
+        case Response::type::embed: 
+            sendMessage(message.channelID, response.rmessage, response.rembed);
+            break;
+        case Response::type::message: 
+            sendMessage(message.channelID, response.rmessage);
+            break;
+        case Response::type::action:
+            break;
     }
-    if(message.startsWith(Config::prefix + "balance")) {
-        Cherri::balance(message);
-    }
+
 }  
 
-void Cherri::avatar(SleepyDiscord::Message message) {
-        SleepyDiscord::User user;
-        std::istringstream iss(message.content);
-        std::vector<std::string> results(std::istream_iterator<std::string>{iss}, 
-                                            std::istream_iterator<std::string>());
-        
-        try { 
-                user = results.size() == 1 ? message.author : getUser(Toolbox::regexRemove(results[1], "[^0-9]+"));
-                
-        } catch (const std::exception& e) {
-            sendMessage(message.channelID, "Please mention a user.");
-            return;
-        }
-    
-        SleepyDiscord::Embed embed;
-        embed.title = user.username + "'s Avatar";
-        embed.color = 0xFF0000;
-        embed.image.url = fmt::format("https://cdn.discordapp.com/avatars/{}/{}{}?size=1024",  
-                                        std::string(user.ID), user.avatar, Toolbox::returnExtention(user.avatar));
-        
-        sendMessage(message.channelID, "", embed);
-}
 /**
  * Economy commands 
  */
-
+/*
 void Cherri::daily(SleepyDiscord::Message message) {
     Economy::addUserCredits(std::string(message.author.ID), 5000);
     SleepyDiscord::Embed embed;
@@ -54,4 +50,4 @@ void Cherri::balance(SleepyDiscord::Message message) {
     embed.title = fmt::format("You have {} credits in your account", Economy::getUserCredits(std::string(message.author.ID)));
     embed.color = 0x00FF00;
     sendMessage(message.channelID, "", embed);
-}
+}*/
