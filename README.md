@@ -3,7 +3,6 @@ C++ Discord Bot Using [SleepyDiscord](https://github.com/yourWaifu/sleepy-discor
 
 <h2> TO:DO </h2>
 <ol>
-  <li> Command handler </li>
   <li> Audio </li>
   <li> General Commands </li>
   <li> Moderation Commands </li>
