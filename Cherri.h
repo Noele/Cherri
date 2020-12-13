@@ -3,7 +3,7 @@
 #include <regex>
 #include "Config.h"
 #include "Economy.h"
-#include "CommandHandler.h"
+#include "Avatar.h"
 
 class Cherri : public SleepyDiscord::DiscordClient {
 public:

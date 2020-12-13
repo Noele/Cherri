@@ -5,16 +5,21 @@ void Cherri::onMessage(SleepyDiscord::Message message) {
     std::vector<std::string> results(std::istream_iterator<std::string>{iss}, std::istream_iterator<std::string>());
     Response response;
     SleepyDiscord::User contextUser;
+    Avatar* a = new Avatar("avatar");
+    Command* commands[] = {a};
+    
     try { 
         contextUser = results.size() == 1 ? message.author : getUser(Toolbox::regexRemove(results[1], "[^0-9]+"));
     } catch (const std::exception& e) {
         contextUser = message.author;
     }
-
-    if (message.startsWith(Config::prefix + "avatar")) {
-        response = CommandHandler::avatar(message, contextUser);
+    
+    for(Command* c : commands) {
+        if (message.startsWith(Config::prefix + c->name)) {
+            response = c->execute(message, contextUser);
+        }
     }
-
+    
     switch(response.rtype) {
         case Response::type::embed: 
             sendMessage(message.channelID, response.rmessage, response.rembed);
