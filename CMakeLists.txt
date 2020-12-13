@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.10)
 
-project(Dawn)
+project(Cherri)
 
-add_executable(Dawn main.cpp 
+add_executable(Cherri main.cpp 
                 Cherri.h 
                 Cherri.cpp
                 Toolbox.h
@@ -23,5 +23,5 @@ add_executable(Dawn main.cpp
 add_subdirectory(deps/sleepy-discord)
 add_subdirectory(deps/fmt)
 
-target_link_libraries(Dawn sleepy-discord)
-target_link_libraries(Dawn fmt)
+target_link_libraries(Cherri sleepy-discord)
+target_link_libraries(Cherri fmt)
