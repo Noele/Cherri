@@ -4,12 +4,12 @@
 #include "Config.h"
 #include "Economy.h"
 #include "Avatar.h"
+#include "Daily.h"
+#include "Balance.h"
 
 class Cherri : public SleepyDiscord::DiscordClient {
 public:
     using SleepyDiscord::DiscordClient::DiscordClient;
     void onMessage(SleepyDiscord::Message message) override;   
-    
-    //void daily(SleepyDiscord::Message message);
-    //void balance(SleepyDiscord::Message message);
+    static Command* commands[];
 };

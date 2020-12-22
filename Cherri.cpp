@@ -1,53 +1,39 @@
 #include "Cherri.h"
-
+Command* Cherri::commands[] = {new Avatar("avatar"), new Daily("daily"), new Balance("balance")}; // Hold instances of our commands in an array
 void Cherri::onMessage(SleepyDiscord::Message message) {
+    // Split the message at spaces
     std::istringstream iss(message.content);
     std::vector<std::string> results(std::istream_iterator<std::string>{iss}, std::istream_iterator<std::string>());
+
+    // Instantiate for scope
     Response response;
     SleepyDiscord::User contextUser;
-    Avatar* a = new Avatar("avatar");
-    Command* commands[] = {a};
     
+    // If a user has been mentioned, set them as the context user, else set it as the message author
     try { 
         contextUser = results.size() == 1 ? message.author : getUser(Toolbox::regexRemove(results[1], "[^0-9]+"));
     } catch (const std::exception& e) {
         contextUser = message.author;
     }
     
-    for(Command* c : commands) {
+    // If the message starts with our prefix + one of our commands names, execute it and retrive its response
+    for(Command* c : Cherri::commands) {
         if (message.startsWith(Config::prefix + c->name)) {
             response = c->execute(message, contextUser);
         }
     }
     
+    // Switch on response type
     switch(response.rtype) {
-        case Response::type::embed: 
-            sendMessage(message.channelID, response.rmessage, response.rembed);
+        case Response::type::embed: // If the response type is embed
+            sendMessage(message.channelID, response.rmessage, response.rembed); // Send a blank message* along with the response embed
             break;
-        case Response::type::message: 
-            sendMessage(message.channelID, response.rmessage);
+        case Response::type::message: // If the response type is message
+            sendMessage(message.channelID, response.rmessage); // Send the response message
             break;
-        case Response::type::action:
-            break;
+        case Response::type::action: // If the response type is action
+            break; // Yet to be implemented
     }
+} 
 
-}  
-
-/**
- * Economy commands 
- */
-/*
-void Cherri::daily(SleepyDiscord::Message message) {
-    Economy::addUserCredits(std::string(message.author.ID), 5000);
-    SleepyDiscord::Embed embed;
-    embed.title = "Added 5000 credits to your account !";
-    embed.color = 0x00FF00;
-    sendMessage(message.channelID, "", embed);
-}
-
-void Cherri::balance(SleepyDiscord::Message message) {
-    SleepyDiscord::Embed embed;
-    embed.title = fmt::format("You have {} credits in your account", Economy::getUserCredits(std::string(message.author.ID)));
-    embed.color = 0x00FF00;
-    sendMessage(message.channelID, "", embed);
-}*/
+// * Due to a bug, a "-" will be sent along side the embed
