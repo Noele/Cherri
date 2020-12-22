@@ -11,6 +11,5 @@ class Cherri : public SleepyDiscord::DiscordClient {
 public:
     using SleepyDiscord::DiscordClient::DiscordClient;
     void onMessage(SleepyDiscord::Message message) override;   
-    void onMember(SleepyDiscord::Snowflake<SleepyDiscord::Server> serverID, SleepyDiscord::ServerMember member) override;
     static Command* commands[];
 };
